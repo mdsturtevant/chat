@@ -12,6 +12,7 @@ function loginDialog(){
 		width: "500px",
 		closeOnEscape: false,
 		modal: true,
+		title: "Enter a username",
 		buttons:[{
 			text: "OK",
 			click: function(){
@@ -26,7 +27,7 @@ function loginDialog(){
 		}]
 	});
 
-	var html = "Username:<input id='userNameField'></input>";
+	var html = "<input id='userNameField'></input>";
 
 	$("#userDialog").html(html);
 
@@ -34,7 +35,7 @@ function loginDialog(){
 }
 
 function userLoggedIn(name){
-	$("#header .loggedInAs").html("Logged In As: "+name);
+	$("#header .loggedInAs").html("Logged in as: "+name);
 
 	startUserVideo();
 
@@ -56,6 +57,22 @@ function userLoggedIn(name){
 	//answer a call
 	peer.on('call', function(call) {
 		answerCall(peer, call, connectedTo.indexOf(call.peer) < 0);
+	});
+
+	peer.on('error', function(err){
+		console.log(peer, err, err.type);
+		switch(err.type){
+			case "peer-unavailable":
+				alert("The peer was unavailable or does not exist.");
+				break;
+			case "unavailable-id":
+				alert("This username is already in use");
+				break;
+			default: 
+				console.log(err);
+				alert("Fatal Error: "+err.type);
+				break;
+		}
 	});
 
 	//Connect to user
@@ -131,33 +148,32 @@ function callUser(peer, name){
 }
 
 function answerCall(peer, call, received){
-	console.log(peer, call);
-
 	if(!received){
-		console.log("I initiated this");
 		if(navigator.getUserMedia){
-	 			navigator.getUserMedia({ audio: true, video: { width: 400, height: 400 } },
-		  			function(stream) {
-		  				call.answer(stream);
-		  			},
-					function(err) {
-						console.log("The following error occurred: " + err.name);
-					}
-				);	
-			}
+ 			navigator.getUserMedia({ audio: true, video: { width: 400, height: 400 } },
+	  			function(stream) {
+	  				call.answer(stream);
+	  			},
+				function(err) {
+					console.log("The following error occurred: " + err.name);
+				}
+			);	
+		}
 
-			//Gets other stream
-			call.on('stream', function(stream) {
-				var video = $('#theirVideo')[0];
-	 			video.srcObject = stream;
-	 			video.onloadedmetadata = function(e) {
-	   				video.play();
-	 			};
+		//Gets other stream
+		call.on('stream', function(stream) {
+			var video = $('#theirVideo')[0];
+ 			video.srcObject = stream;
+ 			video.onloadedmetadata = function(e) {
+   				video.play();
+ 			};
 
-	 			//give your video back
-	 			callUser(peer, call.peer);
+ 			disconnectButton(call);
 
-			});
+ 			//give your video back
+ 			callUser(peer, call.peer);
+
+		});
 
 	}else{
 		$("#answerCallDialog").dialog({
@@ -191,6 +207,8 @@ function answerCall(peer, call, received){
 	   				video.play();
 	 			};
 
+	 			disconnectButton(call);
+
 	 			//give your video back
 	 			callUser(peer, call.peer);
 
@@ -207,4 +225,19 @@ function answerCall(peer, call, received){
 
 		$("#answerCallDialog").dialog("open");
 	}
+
+	call.on('close', function(){
+		$("#disconnectButton").hide();
+	});
+
+
+}
+
+function disconnectButton(call){
+	$("#disconnectButton").show();
+	$("#disconnectButton").off("click");
+	$("#disconnectButton").on("click", function(){
+		call.close();
+		//if firefox, need to handle close event here
+	});
 }
