@@ -1,0 +1,41 @@
+<html>
+
+<head>
+	<title>Chat</title>
+
+	<link rel="stylesheet" href="libs/jQueryUI/jquery-ui.css">
+	<link rel="stylesheet" href="css/chat.css">
+
+	<script src="libs/jQuery/jquery-3.2.1.js"></script>
+	<script src="libs/jQueryUI/jquery-ui.js"></script>
+	<script src="libs/peerJS/peer.min.js"></script>
+	<script src="js/chat.js"></script>
+	<script src="js/config.js"></script>
+
+</head>
+
+<body>
+
+	<div id='header'>
+		<div class='loggedInAs'></div>
+	</div>
+
+	<div id='leftContainer'>
+		Connect to User: <input id='destUser'></input><button id='submitDestUser'>Connect</button>
+	</div>
+	<div id='rightContainer'>
+		<div>
+			<div class='videoLabel' data-video='myVideo'></div>
+			<video id='myVideo'></video>
+		</div>
+		<video id='theirVideo'></video>
+	</div>
+
+	<div id='userDialog'></div>
+	<div id='answerCallDialog'></div>
+
+	<div id='footer'></div>
+
+</body>
+
+</html>

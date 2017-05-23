@@ -1,0 +1,74 @@
+
+body{
+	margin: 0px;
+}
+
+button{
+	background-color: #D20117;
+	color: #FFFFFF;
+	padding: 4px;
+	cursor: pointer;
+}
+
+
+.ui-dialog{
+	padding: 0px;
+}
+.ui-widget-header{
+	background: #D20117;
+}
+.ui-dialog-titlebar-close{
+	display: none;
+}
+
+
+.loggedInAs{
+	color: #FFFFFF;
+	position: absolute;
+	right: 0px;
+	padding: 10px;
+	margin: 10px;
+}
+
+.videoOverlayText{
+	display: none;
+}
+
+.acceptCall{
+	background-color: #228B22;
+}
+
+#header, #footer{
+	background-color: #D20117;
+	position: absolute;
+	height: 100px;
+	width: 100%;
+}
+
+#header{
+	top: 0px;
+}
+
+#footer{
+	bottom: 0px;
+}
+
+#leftContainer, #rightContainer{
+	position: absolute;
+	width: 50%;
+	height: calc( 100% - 200px );
+	top: 100px;
+}
+
+#myVideo{
+	width: 150px;
+	height: 150px;
+}
+
+#theirVideo{
+	width: 100%;
+}
+
+#rightContainer{
+	right: 0px;
+}
